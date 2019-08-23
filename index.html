@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="./tasks.js"></script>
+
+
+    <title>Tasks</title>
+    <script>
+        $(document).ready(function () {
+            loadDate(data);
+            $('#assigned').submit(function (e) {
+                e.preventDefault();
+                const tr = $(this).serializeArray().reduce((acc, curr) => {
+                    acc[curr.name] = curr.value;
+                    return acc;
+                }, {});
+                data = [tr, ...data];
+                loadDate(data);
+                $(this).find("input[type=text], textarea").val("");
+            })
+        });
+        function loadDate(row = data) {
+            let html = row.reduce((acc, curr) => {
+                return `${acc}<tr>
+                    <td>${curr.name}</td>
+                    <td>${curr.date}</td>
+                    <td>${curr.assigned}</td>
+                    </tr>`
+            }, '')
+            $('#load').html(html);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Task Tracker</h1>
+            <span>V2.0</span>
+
+            <div class="row" style="background-color: #fff;">
+                <div class="col-md-6">
+                    <h3>Create a Task</h3>
+                    <form id="assigned" name="assigned" autocomplete="on">
+                        <div class="form-group">
+                            <label for="name">Task Name</label>
+                            <input type="text" class="form-control" name="name" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="text" class="form-control" name="date" format="dd/mm/yyyy" placeholder="Date"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assigned">Assigned To</label>
+                            <input type="text" class="form-control" name="assigned" placeholder="Assigned" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h3>Existing Tasks</h3>
+                    <table id="load" class="table table-bordered table-striped">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
